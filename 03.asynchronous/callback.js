@@ -1,11 +1,47 @@
 import sqlite3 from "sqlite3";
 const db = new sqlite3.Database("./test.db");
 
-db.serialize(() => {
+function createTable(callback) {
   db.run(
-    "CREATE TABLE callbacks (id INT AUTO_INCREMENT, name VARCHAR(10), PRIMARY KEY (id))",
+    "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)",
+    () => {
+      console.log("テーブルを作成");
+      callback();
+    }
   );
-  const name = "KURUMA DAISUKE";
-  db.run("INSERT INTO callbacks (name) VALUES (?)", [name]);
-  db.close();
+}
+
+function insertData(callback) {
+  db.run(
+    "INSERT INTO members (title) VALUES (?)",
+    "初めてのJavaScript",
+    function () {
+      const lastID = this.lastID;
+      console.log(`データを挿入 => ID: ${lastID}`);
+      callback();
+    }
+  );
+}
+
+function getData(callback) {
+  db.get("SELECT * FROM members", (err, row) => {
+    console.log(`id:「${row.id}」 title:「${row.title}」`);
+    callback();
+  });
+}
+
+function deleteTable() {
+  db.run("DROP TABLE members", () => {
+    console.log("テーブルを削除");
+  });
+}
+
+createTable(() => {
+  insertData(() => {
+    getData(() => {
+      deleteTable(() => {
+        db.close();
+      });
+    });
+  });
 });
