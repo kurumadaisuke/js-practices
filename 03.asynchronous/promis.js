@@ -1,4 +1,4 @@
-import * as async_file from "./common_function.js";
+import * as common_function from "./common_function.js";
 
 const
   createTablesql = "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)",
@@ -6,8 +6,8 @@ const
   getDatasql = "SELECT * FROM members",
   deleteTablesql = "DROP TABLE members";
 
-async_file
+common_function
   .createTable(createTablesql)
-  .then(() => async_file.insertData(insertDatasql, "初めてのJavaScript"))
-  .then(() => async_file.getData(getDatasql))
-  .then(() => async_file.deleteTable(deleteTablesql));
+  .then(() => common_function.insertData(insertDatasql, "初めてのJavaScript"))
+  .then(() => common_function.getData(getDatasql))
+  .then(() => common_function.deleteTable(deleteTablesql));
