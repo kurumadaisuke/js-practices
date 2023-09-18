@@ -15,7 +15,7 @@ for (let countDays = 1; countDays <= lastDate.getDate(); countDays++) {
     process.stdout.write("   ".repeat(today.getDay()));
   }
   process.stdout.write(paddDays + " ");
-  if (today.getDay() === 6) {
+  if (today.getDay() === 6 || countDays === lastDate.getDate()) {
     process.stdout.write("\n");
   }
 }
