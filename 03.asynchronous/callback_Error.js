@@ -4,21 +4,31 @@ const db = new sqlite3.Database("./test.db");
 function createTable(callback) {
   db.run(
     "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)",
-    () => {
-      console.log("テーブルを作成");
-      callback();
+    (error) => {
+      if (error) {
+        console.error("テーブル作成エラー", error);
+        callback(error);
+      } else {
+        console.log("テーブルを作成");
+        callback();
+      }
     }
   );
 }
 
 function insertData(callback) {
   db.run(
-    "INSERT INTO members (title) VALUES (?)",
-    "初めてのJavaScript",
-    function () {
-      const lastID = this.lastID;
-      console.log(`データを挿入 => ID: ${lastID}`);
-      callback();
+    "INSERT INTO members (username) VALUES (?)",
+    "くるまだいすけ",
+    function (error) {
+      if (error) {
+        console.error("テーブル作成エラー", error);
+        callback(error);
+      } else {
+        const lastID = this.lastID;
+        console.log(`データを挿入 => ID: ${lastID}`);
+        callback();
+      }
     }
   );
 }
@@ -36,7 +46,10 @@ function deleteTable() {
   });
 }
 
-createTable(() => {
+createTable((err) => {
+  if (err) {
+    console.error("エラー:", err);
+  }
   insertData(() => {
     getData(() => {
       deleteTable(() => {
