@@ -1,23 +1,28 @@
 import minimist from "minimist";
 
-const argv = minimist(process.argv.slice(2));
-const today =
-  argv.y === undefined || argv.m === undefined ? new Date() : undefined;
-const year = argv.y === undefined ? today.getFullYear() : argv.y;
-const month = argv.m === undefined ? today.getMonth() + 1 : argv.m;
+const argv = minimist(process.argv.slice(2)),
+  today = new Date(),
+  year = argv.y ?? today.getFullYear(),
+  month = argv.m ?? today.getMonth() + 1,
+  lastDate = new Date(year, month, 0);
 
-const lastDate = new Date(year, month, 0);
 console.log(`      ${month}月 ${year}`);
 console.log("日 月 火 水 木 金 土");
 
-for (let countDays = 1; countDays <= lastDate.getDate(); countDays++) {
-  let padDays = String(countDays).padStart(2, " ");
-  let days = new Date(year, month - 1, countDays);
-  if (countDays === 1) {
-    process.stdout.write("   ".repeat(days.getDay()));
+for (let countDay = 1; countDay <= lastDate.getDate(); countDay++) {
+  const padDay = String(countDay).padStart(2, " ");
+  const day = new Date(year, month - 1, countDay);
+  if (countDay === 1) {
+    process.stdout.write("   ".repeat(day.getDay()));
   }
-  process.stdout.write(padDays + " ");
-  if (days.getDay() === 6 || countDays === lastDate.getDate()) {
+
+  if (day.getDay() === 6) {
+    process.stdout.write(padDay);
+  } else {
+    process.stdout.write(padDay + " ");
+  }
+
+  if (day.getDay() === 6 || countDay === lastDate.getDate()) {
     process.stdout.write("\n");
   }
 }
