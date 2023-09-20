@@ -34,7 +34,11 @@ function insertData(callback) {
 }
 
 function getData(callback) {
-  db.get("SELECT * FROM members", (err, row) => {
+  db.get("SELECT * FROM members", (error, row) => {
+    if (error){
+      console.error("データ取得エラー:", error)
+      callback(error)
+    }
     console.log(`id:「${row.id}」 title:「${row.title}」`);
     callback();
   });

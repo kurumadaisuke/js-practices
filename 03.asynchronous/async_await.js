@@ -1,10 +1,10 @@
 import * as async_functions from "./async_functions.js";
 
 const createTablesql =
-    "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)",
-  insertDatasql = "INSERT INTO members (title) VALUES (?)",
-  getDatasql = "SELECT * FROM members",
-  deleteTablesql = "DROP TABLE members";
+  "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)";
+const insertDatasql = "INSERT INTO members (title) VALUES (?)";
+const getDatasql = "SELECT * FROM members";
+const deleteTablesql = "DROP TABLE members";
 
 const async_await_func = async function () {
   await async_functions.createTable(createTablesql);
