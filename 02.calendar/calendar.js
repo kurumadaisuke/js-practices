@@ -16,13 +16,11 @@ for (let countDay = 1; countDay <= lastDate.getDate(); countDay++) {
     process.stdout.write("   ".repeat(day.getDay()));
   }
 
-  if (day.getDay() === 6) {
-    process.stdout.write(padDay);
-  } else {
-    process.stdout.write(padDay + " ");
-  }
+  process.stdout.write(padDay);
 
   if (day.getDay() === 6 || countDay === lastDate.getDate()) {
     process.stdout.write("\n");
+  } else {
+    process.stdout.write(" ");
   }
 }
