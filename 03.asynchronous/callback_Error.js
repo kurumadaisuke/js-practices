@@ -3,7 +3,7 @@ const db = new sqlite3.Database("./test.db");
 
 function createTable(callback) {
   const createTableSql =
-    "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)";
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)";
 
   db.run(createTableSql, (error) => {
     if (error) {
@@ -17,7 +17,7 @@ function createTable(callback) {
 }
 
 function insertData(callback) {
-  const insertDataSql = "INSERT INTO members (username) VALUES (?)";
+  const insertDataSql = "INSERT INTO books (username) VALUES (?)";
 
   db.run(insertDataSql, "くるまだいすけ", function (error) {
     if (error) {

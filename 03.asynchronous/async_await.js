@@ -1,4 +1,4 @@
-import * as async_functions from "./async_functions.js";
+import * as async_functions from "./async_functions_module.js";
 
 const createTablesql =
   "CREATE TABLE members (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)";
