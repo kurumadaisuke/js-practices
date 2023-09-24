@@ -15,7 +15,7 @@ for (let dayCounter = 1; dayCounter <= lastDay.getDate(); dayCounter++) {
     process.stdout.write("   ".repeat(day.getDay()));
   }
 
-  const formattedDayString = String(dayCounter).padStart(2, " ");
+  const formattedDayString = String(day.getDate()).padStart(2, " ");
   process.stdout.write(formattedDayString);
 
   if (day.getDay() === 6 || day.getDate() === lastDay.getDate()) {
