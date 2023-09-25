@@ -7,11 +7,15 @@ const getDatasql = "SELECT * FROM books";
 const deleteTablesql = "DROP TABLE books";
 
 const async_await_func = async function () {
-  await async_functions.createTable(createTablesql);
-  await async_functions.insertData(insertDatasql, "初めてのJavaScript");
-  await async_functions.getData(getDatasql);
-  await async_functions.deleteTable(deleteTablesql);
-  await async_functions.dbClose();
+  try {
+    await async_functions.createTable(createTablesql);
+    await async_functions.insertData(insertDatasql, "初めてのJavaScript");
+    await async_functions.getData(getDatasql);
+    await async_functions.deleteTable(deleteTablesql);
+    await async_functions.dbClose();
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 async_await_func();
