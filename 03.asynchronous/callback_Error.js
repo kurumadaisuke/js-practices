@@ -34,12 +34,12 @@ function insertData(callback) {
 function getData(callback) {
   const getDataSql = "SELECT * FROM username";
 
-  db.get(getDataSql, (error, row) => {
+  db.get(getDataSql, (error, book) => {
     if (error) {
       console.log("データ取得エラー");
       callback(error);
     } else {
-      console.log(`id:「${row.id}」 title:「${row.title}」`);
+      console.log(`id:「${book.id}」 title:「${book.title}」`);
       callback();
     }
   });

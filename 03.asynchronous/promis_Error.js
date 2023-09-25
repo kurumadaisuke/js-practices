@@ -10,11 +10,8 @@ async_functions
   .createTable(createTablesql)
   .then(() => async_functions.insertData(insertDatasql, "くるまだいすけ"))
   .catch((error) => console.log(error.message))
-
   .then(() => async_functions.getData(getDatasql))
   .catch((error) => console.log(error.message))
-
   .then(() => async_functions.deleteTable(deleteTablesql))
   .catch((error) => console.log(error.message))
-
   .then(() => async_functions.dbClose());

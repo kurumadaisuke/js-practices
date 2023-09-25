@@ -33,12 +33,12 @@ function insertData(insertDatasql, data) {
 
 function getData(getDatasql) {
   return new Promise((resolve, reject) => {
-    db.get(getDatasql, (error, row) => {
+    db.get(getDatasql, (error, book) => {
       if (error) {
         console.log("データ取得失敗");
         reject(error);
       } else {
-        console.log(`id:「${row.id}」 title:「${row.title}」`);
+        console.log(`id:「${book.id}」 title:「${book.title}」`);
         resolve();
       }
     });

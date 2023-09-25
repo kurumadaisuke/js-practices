@@ -24,8 +24,8 @@ function insertData(callback) {
 function getData(callback) {
   const getDataSql = "SELECT * FROM books";
 
-  db.get(getDataSql, (error, row) => {
-    console.log(`id:「${row.id}」 title:「${row.title}」`);
+  db.get(getDataSql, (error, book) => {
+    console.log(`id:「${book.id}」 title:「${book.title}」`);
     callback();
   });
 }
