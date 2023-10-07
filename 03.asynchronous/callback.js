@@ -2,7 +2,7 @@ import sqlite3 from "sqlite3";
 const db = new sqlite3.Database("./test.db");
 
 db.run(
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL)",
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE NOT NULL",
   () => {
     console.log("テーブルを作成");
     db.run("INSERT INTO books (title) VALUES (?)", "初めてのJavaScript", () => {
