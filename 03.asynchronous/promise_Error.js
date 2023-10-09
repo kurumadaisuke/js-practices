@@ -11,23 +11,16 @@ async_functions
   .then(() => {
     console.log("テーブルを作成");
   })
-
   .then(() => async_functions.insertData(insertDatasql, "くるまだいすけ"))
-  .then((lastID) => {
-    console.log(`データを挿入 => ID: ${lastID}`);
+  .catch((error) => {
+    console.error(error.message);
+    return async_functions.getData(getDatasql);
   })
-  .catch((error) => console.error(error.message))
-
-  .then(() => async_functions.getData(getDatasql))
-  .then((book) => {
-    console.log(`id:「${book.id}」 title:「${book.title}」`);
+  .catch((error) => {
+    console.error(error.message);
+    return async_functions.deleteTable(deleteTablesql);
   })
-  .catch((error) => console.error(error.message))
-
-  .then(() => async_functions.deleteTable(deleteTablesql))
   .then(() => {
     console.log("テーブルを削除");
-  })
-  .catch((error) => console.error(error.message))
-
-  .then(() => async_functions.dbClose());
+    return async_functions.dbClose();
+  });
