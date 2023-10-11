@@ -1,7 +1,19 @@
-// import minimist from "minimist";
-// import * as List from "./list.js";
+import sqlite3 from "sqlite3";
 
-// const argv = minimist(process.argv.slice(2));
-// argv.l ?? new List.List().showList();
+const db = new sqlite3.Database("./memos.sqlite3");
+const checkTableExistsSql = db.get(
+  "SELECT COUNT(*) FROM sqlite_master WHERE TYPE='table' AND name='memos'"
+);
 
-console.log("TEST")
+console.log(checkTableExistsSql);
+
+db.run(
+  "CREATE TABLE memos (id INTEGER PRIMARY KEY AUTOINCREMENT, context TEXT NOT NULL)"
+);
+
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+
+process.stdin.on("data", function (data) {
+  console.log(data);
+});
