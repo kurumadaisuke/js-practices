@@ -1,19 +1,33 @@
 import sqlite3 from "sqlite3";
+import createOption from "./option.js";
 
 const db = new sqlite3.Database("./memos.sqlite3");
-const checkTableExistsSql = db.get(
-  "SELECT COUNT(*) FROM sqlite_master WHERE TYPE='table' AND name='memos'"
-);
+const createMemoDatabaseSql =
+  "CREATE TABLE IF NOT EXISTS memos (id INTEGER PRIMARY KEY AUTOINCREMENT, context TEXT NOT NULL)";
 
-console.log(checkTableExistsSql);
+function createDatabase() {
+  return new Promise((resolve, reject) => {
+    db.run(createMemoDatabaseSql, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
 
-db.run(
-  "CREATE TABLE memos (id INTEGER PRIMARY KEY AUTOINCREMENT, context TEXT NOT NULL)"
-);
+const memo = async function () {
+  try {
+    await createDatabase();
+    await createOption();
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error(new Error(error));
+    }
+  }
+};
 
-process.stdin.resume();
-process.stdin.setEncoding("utf8");
-
-process.stdin.on("data", function (data) {
-  console.log(data);
-});
+memo();
