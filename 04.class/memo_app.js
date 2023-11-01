@@ -11,13 +11,9 @@ class MemoApp {
 
   static list() {
     db.all("SELECT * FROM memos", (error, rows) => {
-      if (error) {
-        console.error(error.message);
-      } else {
-        rows.map((row) => {
-          console.log(`No ${row.id}: ${row.context}`);
-        });
-      }
+      rows.forEach((row) => {
+        console.log(row.context);
+      });
     });
   }
 
@@ -27,32 +23,50 @@ class MemoApp {
 
   static delete() {
     (async () => {
+      const choices = await new Promise((resolve) => {
+        db.all("SELECT id, context FROM memos", (error, rows) => {
+          resolve(
+            rows.map((row) => ({
+              name: row.context,
+              value: row.id,
+            }))
+          );
+        });
+      });
+
       const question = {
         type: "select",
-        name: "title",
         message: "Choose a note you want to delete:",
-        choices: this.list,
+        name: "memoId",
+        choices: choices,
+        result() {
+          return this.focused.value;
+        },
       };
+
       const answer = await enquirer.prompt(question);
-      console.log(`僕も${answer.title}が好きだよ`);
+      console.log(answer.memoId);
+      db.run("DELETE FROM memos WHERE id = ?", answer.memoId, () => {
+        console.log(`削除が完了しました: ${answer.memoId}`);
+      });
     })();
   }
-}
 
-function memoData() {
-  return new Promise((resolve, reject) => {
-    try {
-      const rl = readline.createInterface({
-        input: process.stdin,
-      });
-      rl.once("line", (data) => {
-        rl.close();
-        resolve(data);
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
+  static memoData() {
+    return new Promise((resolve, reject) => {
+      try {
+        const rl = readline.createInterface({
+          input: process.stdin,
+        });
+        rl.once("line", (data) => {
+          rl.close();
+          resolve(data);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 function insertData(data) {
@@ -69,8 +83,7 @@ function insertData(data) {
 
 const createMemo = async function () {
   try {
-    const memo = await memoData();
-    await new MemoApp(memo);
+    const memo = await MemoApp.memoData();
     await insertData(memo);
     console.log("データの入力が完了しました");
   } catch (error) {
