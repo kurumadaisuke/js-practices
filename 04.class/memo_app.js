@@ -23,7 +23,7 @@ class MemoApp {
           db.run(
             "INSERT INTO memos (title, context) VALUES (?, ?)",
             [title, context],
-            function () {}
+            function () {},
           );
           resolve();
         });
@@ -57,7 +57,7 @@ class MemoApp {
           } else {
             resolve(searchResultMemo);
           }
-        }
+        },
       );
     });
     console.log(memo.context);
@@ -83,7 +83,7 @@ class MemoApp {
             memos.map((memo) => ({
               name: memo.title,
               value: memo.id,
-            }))
+            })),
           );
         }
       });
