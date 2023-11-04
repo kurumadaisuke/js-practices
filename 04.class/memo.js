@@ -2,18 +2,19 @@ import sqlite3 from "sqlite3";
 import createOption from "./option.js";
 
 const db = new sqlite3.Database("./memos.sqlite3");
-const createMemoDatabaseSql =
-  "CREATE TABLE IF NOT EXISTS memos (id INTEGER PRIMARY KEY AUTOINCREMENT, context TEXT NOT NULL)";
 
 function createDatabase() {
   return new Promise((resolve, reject) => {
-    db.run(createMemoDatabaseSql, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
+    db.run(
+      "CREATE TABLE IF NOT EXISTS memos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, context TEXT)",
+      (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
       }
-    });
+    );
   });
 }
 
