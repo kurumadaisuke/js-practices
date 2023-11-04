@@ -25,21 +25,9 @@ class Option {
   }
 }
 
-function paramsOption() {
-  return new Promise((resolve, reject) => {
-    const paramsOption = process.argv[2];
-    try {
-      const option = new Option(paramsOption);
-      resolve(option);
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
-
-const createOption = async function () {
+const funcrionOptions = async function () {
   try {
-    const option = await paramsOption();
+    const option = await new Option(process.argv[2]);
     await Option.optionControllers(option);
   } catch (error) {
     if (error instanceof Error) {
@@ -50,4 +38,4 @@ const createOption = async function () {
   }
 };
 
-export default createOption;
+export default funcrionOptions;

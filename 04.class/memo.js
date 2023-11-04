@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import createOption from "./option.js";
+import funcrionOptions from "./option.js";
 
 const db = new sqlite3.Database("./memos.sqlite3");
 
@@ -21,7 +21,7 @@ function createDatabase() {
 const memo = async function () {
   try {
     await createDatabase();
-    await createOption();
+    await funcrionOptions();
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
