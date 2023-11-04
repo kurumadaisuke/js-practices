@@ -5,7 +5,7 @@ class Option {
     this.paramsOption = paramsOption;
   }
 
-  static parseOption(option) {
+  static optionControllers(option) {
     switch (option.paramsOption) {
       case undefined:
         createMemo();
@@ -40,7 +40,7 @@ function paramsOption() {
 const createOption = async function () {
   try {
     const option = await paramsOption();
-    await Option.parseOption(option);
+    await Option.optionControllers(option);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
