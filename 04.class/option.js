@@ -6,6 +6,9 @@ class Option {
   }
 
   static optionControllers(option) {
+    const deleteMessage = "削除したいメモを選択してください:";
+    const referenceMessage = "詳細を表示したいメモを選択してください:";
+
     switch (option.paramsOption) {
       case undefined:
         createMemo();
@@ -14,10 +17,10 @@ class Option {
         MemoApp.list();
         break;
       case "-r":
-        MemoApp.reference();
+        MemoApp.reference(referenceMessage);
         break;
       case "-d":
-        MemoApp.delete();
+        MemoApp.delete(deleteMessage);
         break;
       default:
         console.log("正しいオプションを指定してください");

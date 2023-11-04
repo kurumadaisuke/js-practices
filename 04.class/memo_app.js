@@ -5,80 +5,74 @@ import enquirer from "enquirer";
 const db = new sqlite3.Database("./memos.sqlite3");
 
 class MemoApp {
-  constructor(memo) {
-    this.memo = memo;
-  }
-
   static list() {
-    db.all("SELECT * FROM memos", (error, rows) => {
-      rows.forEach((row) => {
-        console.log(row.title);
-      });
+    db.all("SELECT * FROM memos", (error, memos) => {
+      if (error) {
+        console.error(error.message);
+      } else {
+        memos.forEach((memo) => {
+          console.log(memo.title);
+        });
+      }
     });
   }
 
-  static reference() {
-    (async () => {
-      const choices = await new Promise((resolve) => {
-        db.all("SELECT id, title FROM memos", (error, rows) => {
-          resolve(
-            rows.map((row) => ({
-              name: row.title,
-              value: row.id,
-            }))
-          );
-        });
-      });
-
-      const question = {
-        type: "select",
-        message: "Choose a note you want to see:",
-        name: "memoId",
-        choices: choices,
-        result() {
-          return this.focused.value;
-        },
-      };
-
-      const answer = await enquirer.prompt(question);
-      db.all(
+  static async reference(referenceMessage) {
+    const memoId = await this.getChoiceMemoId(referenceMessage);
+    const memo = await new Promise((resolve) => {
+      db.get(
         "SELECT context FROM memos WHERE id = ?",
-        answer.memoId,
-        (error, rows) => {
-          console.log(rows[0].context);
+        memoId,
+        (error, searchResultMemo) => {
+          if (error) {
+            console.error(error.message);
+          } else {
+            resolve(searchResultMemo);
+          }
         }
       );
-    })();
+    });
+    console.log(memo.context);
   }
 
-  static delete() {
-    (async () => {
-      const choices = await new Promise((resolve) => {
-        db.all("SELECT id, title FROM memos", (error, rows) => {
+  static async delete(deleteMessage) {
+    const memoId = await this.getChoiceMemoId(deleteMessage);
+    await new Promise((resolve) => {
+      db.run("DELETE FROM memos WHERE id = ?", memoId, () => {
+        resolve();
+      });
+    });
+    console.log(`ID:${memoId}を削除しました`);
+  }
+
+  static async getChoiceMemoId(Message) {
+    const choices = await new Promise((resolve) => {
+      db.all("SELECT * FROM memos", (error, memos) => {
+        if (error) {
+          console.error(error.message);
+        } else {
           resolve(
-            rows.map((row) => ({
-              name: row.title,
-              value: row.id,
+            memos.map((memo) => ({
+              name: memo.title,
+              value: memo.id,
             }))
           );
-        });
+        }
       });
+    });
 
-      const question = {
-        type: "select",
-        message: "Choose a note you want to delete:",
-        name: "memoId",
-        choices: choices,
-        result() {
-          return this.focused.value;
-        },
-      };
+    const question = {
+      type: "select",
+      message: `${Message}`,
+      name: "memoId",
+      choices: choices,
+      result() {
+        return this.focused.value;
+      },
+    };
 
-      const answer = await enquirer.prompt(question);
-      db.run("DELETE FROM memos WHERE id = ?", answer.memoId, () => {
-        console.log("削除が完了しました");
-      });
-    })();
+    const answer = await enquirer.prompt(question);
+    return answer.memoId;
   }
 
   static memoData() {
