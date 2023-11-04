@@ -1,4 +1,4 @@
-import { MemoApp, createMemo } from "./memo_app.js";
+import { MemoApp } from "./memo_app.js";
 
 class Option {
   constructor(paramsOption) {
@@ -11,7 +11,8 @@ class Option {
 
     switch (option.paramsOption) {
       case undefined:
-        createMemo();
+        MemoApp.add();
+        console.log("データの入力が完了しました");
         break;
       case "-l":
         MemoApp.list();

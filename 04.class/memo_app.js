@@ -5,6 +5,34 @@ import enquirer from "enquirer";
 const db = new sqlite3.Database("./memos.sqlite3");
 
 class MemoApp {
+  static add() {
+    return new Promise((resolve, reject) => {
+      try {
+        const tmpMemoList = [];
+        const rl = readline.createInterface({
+          input: process.stdin,
+        });
+
+        rl.on("line", (memoData) => {
+          tmpMemoList.push(memoData);
+        });
+
+        rl.on("close", () => {
+          const title = tmpMemoList[0];
+          const context = tmpMemoList.join("\n");
+          db.run(
+            "INSERT INTO memos (title, context) VALUES (?, ?)",
+            [title, context],
+            function () {}
+          );
+          resolve();
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   static list() {
     db.all("SELECT * FROM memos", (error, memos) => {
       if (error) {
@@ -74,47 +102,6 @@ class MemoApp {
     const answer = await enquirer.prompt(question);
     return answer.memoId;
   }
-
-  static memoData() {
-    return new Promise((resolve, reject) => {
-      try {
-        const lists = [];
-        const rl = readline.createInterface({
-          input: process.stdin,
-        });
-
-        rl.on("line", (data) => {
-          lists.push(data);
-        });
-
-        rl.on("close", () => {
-          const title = lists[0];
-          const context = lists.join("\n");
-          db.run(
-            "INSERT INTO memos (title, context) VALUES (?, ?)",
-            [title, context],
-            function () {}
-          );
-          resolve();
-        });
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
 }
 
-const createMemo = async function () {
-  try {
-    await MemoApp.memoData();
-    console.log("データの入力が完了しました");
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    } else {
-      console.error(new Error(error));
-    }
-  }
-};
-
-export { MemoApp, createMemo };
+export { MemoApp };
