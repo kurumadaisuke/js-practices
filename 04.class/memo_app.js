@@ -5,7 +5,34 @@ import enquirer from "enquirer";
 const db = new sqlite3.Database("./memos.sqlite3");
 
 class MemoApp {
-  static add() {
+  constructor(paramsOption) {
+    this.paramsOption = paramsOption;
+  }
+
+  optionControllers(option) {
+    const deleteMessage = "削除したいメモを選択してください:";
+    const referenceMessage = "詳細を表示したいメモを選択してください:";
+
+    switch (option.paramsOption) {
+      case undefined:
+        this.add();
+        console.log("データの入力が完了しました");
+        break;
+      case "-l":
+        this.list();
+        break;
+      case "-r":
+        this.reference(referenceMessage);
+        break;
+      case "-d":
+        this.delete(deleteMessage);
+        break;
+      default:
+        console.log("正しいオプションを指定してください");
+    }
+  }
+
+  add() {
     return new Promise((resolve, reject) => {
       try {
         const tmpMemoList = [];
@@ -23,7 +50,7 @@ class MemoApp {
           db.run(
             "INSERT INTO memos (title, context) VALUES (?, ?)",
             [title, context],
-            function () {},
+            function () {}
           );
           resolve();
         });
@@ -33,8 +60,8 @@ class MemoApp {
     });
   }
 
-  static list() {
-    db.all("SELECT * FROM memos", (error, memos) => {
+  list() {
+    db.all("SELECT * FROM memos ORDER BY id ASC", (error, memos) => {
       if (error) {
         console.error(error.message);
       } else {
@@ -45,7 +72,7 @@ class MemoApp {
     });
   }
 
-  static async reference(referenceMessage) {
+  async reference(referenceMessage) {
     const memoId = await this.getChoiceMemoId(referenceMessage);
     const memo = await new Promise((resolve) => {
       db.get(
@@ -57,13 +84,13 @@ class MemoApp {
           } else {
             resolve(searchResultMemo);
           }
-        },
+        }
       );
     });
     console.log(memo.context);
   }
 
-  static async delete(deleteMessage) {
+  async delete(deleteMessage) {
     const memoId = await this.getChoiceMemoId(deleteMessage);
     await new Promise((resolve) => {
       db.run("DELETE FROM memos WHERE id = ?", memoId, () => {
@@ -73,7 +100,7 @@ class MemoApp {
     console.log(`ID:${memoId}を削除しました`);
   }
 
-  static async getChoiceMemoId(Message) {
+  async getChoiceMemoId(Message) {
     const choices = await new Promise((resolve) => {
       db.all("SELECT * FROM memos", (error, memos) => {
         if (error) {
@@ -83,7 +110,7 @@ class MemoApp {
             memos.map((memo) => ({
               name: memo.title,
               value: memo.id,
-            })),
+            }))
           );
         }
       });
@@ -104,4 +131,4 @@ class MemoApp {
   }
 }
 
-export { MemoApp };
+export default MemoApp;
