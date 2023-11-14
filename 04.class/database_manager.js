@@ -5,7 +5,7 @@ import readline from "readline";
 class DatabaseManager {
   constructor() {
     this.db = new sqlite3.Database("./memos.sqlite3");
-    this.createDatabase
+    this.createDatabase;
   }
 
   createDatabase() {
@@ -18,7 +18,7 @@ class DatabaseManager {
           } else {
             resolve();
           }
-        }
+        },
       );
     });
   }
@@ -41,7 +41,7 @@ class DatabaseManager {
           this.db.run(
             "INSERT INTO memos (title, context) VALUES (?, ?)",
             [title, context],
-            function () {}
+            function () {},
           );
           resolve();
         });
@@ -85,7 +85,7 @@ class DatabaseManager {
           } else {
             resolve(searchResultMemo);
           }
-        }
+        },
       );
     });
     console.log(memo.context);
@@ -101,7 +101,7 @@ class DatabaseManager {
             memos.map((memo) => ({
               name: memo.title,
               value: memo.id,
-            }))
+            })),
           );
         }
       });
