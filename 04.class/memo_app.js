@@ -1,4 +1,4 @@
-import Memo from "./memo_process.js";
+import Memo from "./memo.js";
 
 class MemoApp {
   constructor(paramsOption) {
@@ -8,7 +8,8 @@ class MemoApp {
   optionControllers(option) {
     const deleteMessage = "削除したいメモを選択してください:";
     const referenceMessage = "詳細を表示したいメモを選択してください:";
-    const memo = new Memo();
+    const fileName = "./memos.sqlite3";
+    const memo = new Memo(fileName);
 
     switch (option.paramsOption) {
       case undefined:
